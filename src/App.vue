@@ -11,6 +11,7 @@ import useAuthStore from '@/store/auth'
 import useResetStore from './store/reset'
 import AppNav from './components/layout/AppNav.vue'
 import useUserProfileInfoController from "@/controllers/useUserProfileInfoController";
+import useTaskController from "@/controllers/useTaskController";
 
 export default defineComponent({
   name: 'App',
@@ -20,6 +21,7 @@ export default defineComponent({
     const { isAuthenticated } = useAuthStore()
     const { reset } = useResetStore()
     const profile = useUserProfileInfoController()
+    const taskController = useTaskController()
 
     if (!isAuthenticated.value && router.currentRoute.value.meta?.requiresAuth) {
       router.push('/login')
@@ -27,6 +29,7 @@ export default defineComponent({
 
     if (isAuthenticated.value) {
       profile.findUserProfile();
+      taskController.getTasks({})
     }
 
     watch(isAuthenticated, (c) => {
